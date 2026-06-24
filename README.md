@@ -18,8 +18,7 @@
 10. [How the RAG Pipeline Works](#how-the-rag-pipeline-works)
 11. [Design Decisions](#design-decisions)
 12. [Deployment Guide](#deployment-guide)
-13. [Known Limitations](#known-limitations)
-14. [Roadmap](#roadmap)
+
 
 ---
 
@@ -555,40 +554,4 @@ The `data/chroma_db/` directory must be present in the repo for Render to serve 
 
 ---
 
-## Known Limitations
 
-**Data coverage window**: Structured race result data covers 2018–2025 in full. Driver standings cover 1950–2025. For events before 2018, the chatbot relies on Wikipedia articles which cover major historical context but not granular race-by-race results.
-
-**Wikipedia article staleness**: The Wikipedia data was collected at a point in time. Events after the collection date are not reflected unless the data pipeline is re-run.
-
-**No conversation memory**: Each question is answered independently. The backend does not maintain conversation state — the RAG query for message 5 has no knowledge of messages 1–4. Adding conversation context would require passing recent messages into the LLM prompt.
-
-**Ephemeral chat history**: `localStorage` is browser and device-specific. Chat history is not synced across devices and will be lost if the user clears browser data.
-
-**CPU-only inference**: The embedding model runs on CPU. On Render's free tier, cold-start embedding can take 3–5 seconds. Subsequent queries are faster due to the singleton pattern.
-
-**Free tier sleep**: Render free web services spin down after 15 minutes of inactivity and take ~30 seconds to wake on the next request. Upgrading to Render Starter ($7/month) keeps the service always-on.
-
----
-
-## Roadmap
-
-- [ ] **Conversation memory** — pass last 3–4 message pairs into the LLM system prompt for follow-up question support
-- [ ] **Per-user auth + cloud history** — NextAuth.js (Google OAuth) + PostgreSQL via Supabase; replace `localStorage` with server-side storage
-- [ ] **Live data integration** — poll the Jolpi Ergast API for current-season results and refresh the vector store automatically post-race weekend
-- [ ] **Streaming responses** — replace one-shot JSON response with server-sent events for token-by-token streaming (FastAPI `StreamingResponse` + Next.js `ReadableStream`)
-- [ ] **Re-ranking** — add a cross-encoder re-ranking step between retrieval and generation to improve answer quality on complex multi-hop queries
-- [ ] **Voice input** — Web Speech API for hands-free querying during race broadcasts
-- [ ] **Mobile app** — React Native port with the same FastAPI backend
-
----
-
-## Author
-
-**Tanveer** — B.Tech Electrical Engineering, NIT Jalandhar (Batch 2024–2028)
-
-Research interests: battery management systems, autonomous drone navigation, applied machine learning.
-
----
-
-*Veloce is not affiliated with Formula 1, the FIA, or any F1 team. All F1 data is sourced from the public Ergast/Jolpi API and Wikipedia.*
