@@ -1,0 +1,15 @@
+# Node dependencies and cache
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+
+# Python cache and environments
+backend/__pycache__/
+backend/*.pyc
+.venv/
+env/
+venv/
+
+# Local database files
+backend/.env
+.env
